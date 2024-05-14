@@ -1,4 +1,6 @@
 #!/bin/bash
+# Güncelleme
+sudo apt update
 
 # MySQL kurulumu
 sudo apt-get install mysql-server
@@ -10,18 +12,20 @@ sudo apt-get install apache2
 sudo apt-get install software-properties-common
 sudo add-apt-repository ppa:ondrej/php
 sudo apt update
-sudo apt install php7.4 libapache2-mod-php7.4 php7.4-common php7.4-mbstring php7.4-xmlrpc php7.4-soap php7.4-gd php7.4-xml php7.4-intl php7.4-mysql php7.4-cli php7.4-mcrypt php7.4-zip php7.4-curl
+sudo apt install php8.3 libapache2-mod-php8.3 php7.4-common php8.3-mbstring php8.3-xmlrpc php8.3-soap php8.3-gd php8.3-xml php8.3-intl php8.3-mysql php8.3-cli php8.3-mcrypt php8.3-zip php8.3-curl
 
 # MySQL kök şifresini güncelleme
 sudo mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password'; FLUSH PRIVILEGES;"
 
 # phpMyAdmin kurulumu
 cd /usr/share
-sudo wget https://files.phpmyadmin.net/phpMyAdmin/5.1.1/phpMyAdmin-5.1.1-all-languages.zip
-sudo unzip phpMyAdmin-5.1.1-all-languages.zip
-sudo mv phpMyAdmin-5.1.1-all-languages phpmyadmin
+sudo wget https://files.phpmyadmin.net/phpMyAdmin/5.2.1/phpMyAdmin-5.2.1-all-languages.zip
+sudo unzip pphpMyAdmin-5.2.1-all-languages.zip
+sudo mv phpMyAdmin-5.2.1-all-languages phpmyadmin
 sudo chmod -R 755 phpmyadmin
 sudo cp phpmyadmin/config.sample.inc.php phpmyadmin/config.inc.php
+sudo apt install phpmyadmin php-mbstring php-zip php-gd php-json php-curl
+sudo systemctl restart apache2
 
 # Apache yapılandırması
 sudo tee /etc/apache2/sites-available/000-default.conf <<EOF
@@ -93,12 +97,14 @@ sudo swapon /swapfile
 cd /tmp
 sudo wget https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz
 sudo tar -zxvf ioncube_loaders_lin_x86-64.tar.gz
-sudo cp ioncube/ioncube_loader_lin_7.4.so $(php -i | grep "extension_dir" | grep -o "/.*")/ioncube_loader_lin_7.4.so
+sudo cp ioncube/ioncube_loader_lin_8.3.so $(php -i | grep "extension_dir" | grep -o "/.*")/ioncube_loader_lin_8.3.so
 echo "zend_extension = $(php -i | grep "extension_dir" | grep -o "/.*/")ioncube_loader_lin_7.4.so" | sudo tee -a /etc/php/7.4/cli/php.ini
 sudo service apache2 restart
 
 # Imagick kurulumu
 sudo apt install imagemagick
-sudo apt install php7.4-imagick
+sudo apt install php8.3-imagick
+
+sudo apt-get install phpmyadmin php-mbstring php-gettext –y
 
 echo "Kurulum tamamlandı."
